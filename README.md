@@ -1,7 +1,7 @@
 # Golang starter example
 
-An application continuum style example application using Golang that includes a single web application with 2 background
-workers. Deployed via Fresh Cloud.
+An [application continuum](https://www.appcontinuum.io/) style example using Golang that includes a single web
+application with 2 background workers. Deployed via [Fresh Cloud](https://www.freshcloud.com/).
 
 * Basic web application
 * Data analyzer
@@ -36,10 +36,24 @@ Build with Pack.
 pack build golang-starter --builder heroku/buildpacks:20
 ```
 
+Run with docker compose.
+
+```bash
+docker-compose up
+````
+
+## Development
+
 Ensure postgres works locally.
 
 ```bash
 "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"
+```
+
+Run the tests.
+
+```bash
+go clean -testcache && go test ./.../
 ```
 
 That's a wrap for now.
