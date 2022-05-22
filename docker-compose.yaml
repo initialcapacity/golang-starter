@@ -1,0 +1,30 @@
+services:
+  basic-server:
+    image: golang-starter
+    container_name: golang-server
+    ports:
+      - "8888:8888"
+    command: basicwebapp
+    environment:
+      PORT: 8888
+  data-analyzer:
+    image: golang-starter
+    container_name: golang-analyzer
+    command: dataanlayzer
+    environment:
+      POSTGRESQL_URL: postgres://postgres:postgres@postgresql:5432/postgres?sslmode=disable
+    depends_on:
+      - postgresql
+  data-collector:
+    image: golang-starter
+    container_name: golang-collector
+    command: datacollector
+  postgresql:
+    image: postgres
+    container_name: golang-postgresql
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ".postgres:/var/lib/postgresql/data"
