@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Netflix, Inc.
+ * Copyright 2022 Hexa-org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-// Inspired by code from the Conductor project available at https://github.com/Netflix/conductor
+// Code from the Hexa project available at https://github.com/hexa-org/policy-orchestrator
+// Inspired by code from the Hexa project available at https://github.com/Netflix/conductor
 
 package workflowsupport
 
