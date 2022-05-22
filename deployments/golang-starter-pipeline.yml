@@ -1,0 +1,127 @@
+resource_types:
+  - name: kpack-image
+    type: registry-image
+    source:
+      repository: gcr.io/cf-build-service-public/concourse-kpack-resource
+      tag: "1.0"
+
+resources:
+  - name: golang-starter-image
+    type: registry-image
+    source:
+      repository: registry.${REGISTRY_DOMAIN}/kpack/golang-starter
+
+  - name: fresch-cloud-source-code
+    type: git
+    source:
+      uri: https://github.com/initialcapacity/freshcloud
+      branch: main
+
+  - name: golang-starter-source-code
+    type: git
+    source:
+      uri: https://github.com/initialcapacity/golang-starter
+      branch: main
+
+  - name: golang-starter-build-service
+    type: kpack-image
+    source:
+      image: golang-starter-image
+      namespace: golang-starter
+      gke:
+        json_key: ((service-account-key))
+        kubeconfig: ((kubeconfig))
+
+  - name: kubernetes-task-image
+    type: registry-image
+    source:
+      repository: registry.${REGISTRY_DOMAIN}/concourse-images/cluster-mgmt
+      tag: latest
+
+jobs:
+  - name: vulnerability-scan
+    plan:
+      - task: sleep
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: ubuntu
+              tag: bionic
+          run:
+            path: /bin/sleep
+            args: [ 5s ]
+      - in_parallel:
+          - get: golang-starter-source-code
+          - get: golang-starter-build-service
+            trigger: true
+            passed: [ build-golang-starter-image ]
+          - get: golang-starter-image
+      - task: trivy-fs
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: aquasec/trivy
+          inputs:
+            - name: golang-starter-image
+          caches:
+            - path: trivy-cache
+          run:
+            path: sh
+            args:
+              - -cex
+              - |
+                trivy --cache-dir trivy-cache fs --severity HIGH,CRITICAL --vuln-type library,os --ignore-unfixed --exit-code 0 golang-starter-image/rootfs
+  - name: build-golang-starter-image
+    plan:
+      - get: golang-starter-source-code
+        trigger: true
+      - put: golang-starter-build-service
+        params:
+          commitish: golang-starter-source-code/.git/ref
+
+  - name: deploy-golang-starter
+    plan:
+      - get: fresch-cloud-source-code
+      - get: golang-starter-source-code
+      - get: golang-starter-build-service
+        passed:
+          - vulnerability-scan
+        trigger: true
+      - get: kubernetes-task-image
+      - task: deploy-kubernetes
+        image: kubernetes-task-image
+        config:
+          platform: linux
+          inputs:
+            - name: fresch-cloud-source-code
+            - name: golang-starter-source-code
+          params:
+            KUBECONFIG: ((kubeconfig))
+            DOMAIN: ((domain))
+            GCP_PROJECT_ID: ((gcp_project_id))
+            GCP_ZONE: ((gcp_zone))
+            GCP_CLUSTER_NAME: ((gcp_cluster_name))
+            GCP_SERVICE_ACCOUNT_JSON: ((service_account_json))
+          run:
+            path: sh
+            args:
+            - -sc
+            - |
+              echo "${DOLLAR}KUBECONFIG" > config.yml
+              export KUBECONFIG=config.yml
+              export IMAGE=$(kubectl get image golang-starter-image -n golang-starter -o jsonpath="{.status.latestImage}")
+              envsubst < ./golang-starter-source-code/deployments/golang-starter.yml > golang-starter.yml
+              unset KUBECONFIG
+
+              export cred_file=$(mktemp)
+              trap "rm ${cred_file}" EXIT
+              echo "${DOLLAR}{GCP_SERVICE_ACCOUNT_JSON}" > ${DOLLAR}{cred_file}
+              chmod 600 ${DOLLAR}{cred_file}
+              gcloud auth login --cred-file "${DOLLAR}{cred_file}" --quiet
+              gcloud container clusters get-credentials ${DOLLAR}{GCP_CLUSTER_NAME} --zone ${DOLLAR}{GCP_ZONE} --project ${DOLLAR}{GCP_PROJECT_ID}
+              kubectl create namespace golang-starter
+              kubectl apply -f golang-starter.yml

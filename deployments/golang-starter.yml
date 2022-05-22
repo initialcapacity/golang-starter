@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: golang-starter
+    source: freshcloud
+  name: golang-starter
+  namespace: golang-starter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: golang-starter
+  template:
+    metadata:
+      labels:
+        app: golang-starter
+    spec:
+      containers:
+        - image: ${IMAGE}
+          name: golang-starter
+          imagePullPolicy: Always
+          command:
+            - basicwebapp
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          env:
+            - name: PORT
+              value: '8888'
+          ports:
+            - containerPort: 8888
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: golang-starter
+  name: golang-starter
+  namespace: golang-starter
+spec:
+  ports:
+    - port: 8888
+      protocol: TCP
+      targetPort: 8888
+  selector:
+    app: golang-starter
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: golang-starter
+  namespace: golang-starter
+  labels:
+    app: golang-starter
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: contour
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    projectcontour.io/websocket-routes: "/"
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: golang-starter.${DOMAIN}
+      http:
+        paths:
+          - backend:
+              service:
+                name: golang-starter
+                port:
+                  number: 8888
+            pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - golang-starter.${DOMAIN}
+      secretName: golang-starter-cert
