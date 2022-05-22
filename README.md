@@ -1,7 +1,8 @@
-# Golang starter example
+# Golang starter
 
-An [application continuum](https://www.appcontinuum.io/) style example using Golang that includes a single web
-application with 2 background workers. Deployed via [Fresh Cloud](https://www.freshcloud.com/).
+An [application continuum](https://www.appcontinuum.io/) style example using Golang
+that includes a single web application with 2 background workers.
+Deployed via [Fresh Cloud](https://www.freshcloud.com/).
 
 * Basic web application
 * Data analyzer
@@ -9,12 +10,11 @@ application with 2 background workers. Deployed via [Fresh Cloud](https://www.fr
 
 The example showcases on the below technologies -
 
-* Language golang
-* 1.18 generics
-* Web Framework gorilla mux and gohtml
-* Build tool golang
-* Testing tools testify
-* Production FreshCloud on Google's Cloud Platform
+* Language golang [Golang](https://go.dev/)
+* Web Framework [Gorilla/mux](https://github.com/gorilla/mux)
+* Build tool [Golang](https://go.dev/)
+* Testing tools [Testify](https://github.com/stretchr/testify)
+* Production [FreshCloud](https://www.freshcloud.com/) on Google's Cloud Platform
 
 ```bash
 go get github.com/gorilla/mux

@@ -15,7 +15,7 @@
  */
 
 // Code from the Hexa project available at https://github.com/hexa-org/policy-orchestrator
-// Inspired by code from the Hexa project available at https://github.com/Netflix/conductor
+// Inspired by code from the Conductor project available at https://github.com/Netflix/conductor
 
 package workflowsupport
 
