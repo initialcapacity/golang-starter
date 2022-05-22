@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main() {
+func newDataAnalyzer() workflowsupport.WorkScheduler[dataanalyzer.Task] {
 	url := os.Getenv("POSTGRESQL_URL")
 	if url == "" {
 		panic("oops, unable to find postgres url.")
@@ -20,6 +20,11 @@ func main() {
 	finder := dataanalyzer.WorkFinder[dataanalyzer.Task]{Gateway: gateway, Results: make(chan bool)}
 	list := []workflowsupport.Worker[dataanalyzer.Task]{&worker}
 	scheduler := workflowsupport.NewScheduler[dataanalyzer.Task](&finder, list, 12_000)
+	return scheduler
+}
+
+func main() {
+	scheduler := newDataAnalyzer()
 	scheduler.Start()
 	select {}
 }
