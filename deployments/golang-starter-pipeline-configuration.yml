@@ -17,14 +17,14 @@ spec:
   serviceAccount: golang-starter-service-account
   tag: registry.$REGISTRY_DOMAIN/kpack/builder
   stack:
-    name: base
+    name: paketo-base
     kind: ClusterStack
   store:
-    name: default
+    name: paketo-default
     kind: ClusterStore
   order:
     - group:
-        - id: heroku/go
+        - id: paketo-buildpacks/go
 ---
 apiVersion: kpack.io/v1alpha1
 kind: Image
