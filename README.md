@@ -64,4 +64,3 @@ go clean -testcache && go test ./.../
 Fresh cloud deployment and pipeline files are located in `deployments`.
 
 That's a wrap for now.
-
