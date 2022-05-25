@@ -1,15 +1,17 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
-	"testing"
+  "fmt"
+  "github.com/stretchr/testify/assert"
+  "testing"
 )
 
 func Test(t *testing.T) {
-	go main()
+  fmt.Println("testing main.")
+  go main()
 }
 
 func TestNew(t *testing.T) {
-	collector := newDataCollector()
-	assert.NotNil(t, collector)
+  collector := newDataCollector()
+  assert.NotNil(t, collector)
 }
