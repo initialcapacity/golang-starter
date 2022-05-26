@@ -17,7 +17,7 @@
     </header>
     <section class="callout">
         <div class="container">
-            a <span class="branded">AppContinuum[]</span> application with background workers.
+            an <span class="branded">AppContinuum[]</span> application with background workers.
         </div>
     </section>
     <main>
