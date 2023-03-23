@@ -1,6 +1,7 @@
 package datacollector
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -35,6 +36,7 @@ func (a *Worker[T]) Run(w Task) error {
 	if err != nil {
 		return err
 	}
+	log.Println(fmt.Sprintf("Collecting data from %s", w.Url))
 	_, err = io.ReadAll(get.Body)
 	return err
 }
