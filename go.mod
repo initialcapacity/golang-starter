@@ -1,6 +1,6 @@
 module github.com/initialcapacity/golang-starter
 
-go 1.18
+go 1.20
 
 // +heroku goVersion go1.18
 
