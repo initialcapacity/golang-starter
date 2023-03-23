@@ -5,7 +5,6 @@
 
 An [application continuum](https://www.appcontinuum.io/) style example using Golang
 that includes a single web application with 2 background workers.
-Deployed via [Fresh Cloud](https://www.freshcloud.com/).
 
 * Basic web application
 * Data analyzer
@@ -19,16 +18,11 @@ The example showcases on the below technologies -
 * Testing tools [Testify](https://github.com/stretchr/testify)
 * Production [FreshCloud](https://www.freshcloud.com/) on Google's Cloud Platform
 
-```bash
-go get github.com/gorilla/mux
-go get github.com/stretchr/testify
-```
-
 ## Getting Started
 
 Install the following prerequisites.
 
-* [Go 1.18](https://go.dev)
+* [Go 1.20](https://go.dev)
 * [Pack](https://buildpacks.io)
 * [Docker Desktop](https://www.docker.com/products/docker-desktop)
 * [Postgresql](https://www.postgresql.org/)
@@ -58,9 +52,5 @@ Run the tests.
 ```bash
 go clean -testcache && go test ./.../
 ```
-
-## Deployment
-
-Fresh cloud deployment and pipeline files are located in `deployments`.
 
 That's a wrap for now.
