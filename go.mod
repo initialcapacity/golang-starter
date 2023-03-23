@@ -2,7 +2,7 @@ module github.com/initialcapacity/golang-starter
 
 go 1.20
 
-// +heroku goVersion go1.18
+// +heroku goVersion go1.20
 
 require (
 	github.com/gorilla/mux v1.8.0
