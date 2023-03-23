@@ -2,10 +2,11 @@ package workflowsupport_test
 
 import (
 	"errors"
-	"github.com/initialcapacity/golang-starter/pkg/workflowsupport"
-	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
+
+	"github.com/initialcapacity/golang-starter/pkg/workflowsupport"
+	"github.com/stretchr/testify/assert"
 )
 
 type NoopTask struct {

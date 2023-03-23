@@ -1,10 +1,11 @@
 package datacollector_test
 
 import (
+	"testing"
+
 	"github.com/initialcapacity/golang-starter/pkg/datacollector"
 	"github.com/initialcapacity/golang-starter/pkg/workflowsupport"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestWorkflow(t *testing.T) {

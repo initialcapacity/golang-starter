@@ -3,11 +3,12 @@ package metricssupport
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"strconv"
 	"sync/atomic"
+
+	"github.com/gorilla/mux"
 )
 
 var requests uint64

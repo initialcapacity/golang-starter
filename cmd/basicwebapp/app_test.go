@@ -1,11 +1,12 @@
 package main
 
 import (
+	"os"
+	"testing"
+
 	"github.com/initialcapacity/golang-starter/pkg/testsupport"
 	"github.com/initialcapacity/golang-starter/pkg/websupport"
 	"github.com/stretchr/testify/assert"
-	"os"
-	"testing"
 )
 
 func Test(t *testing.T) {

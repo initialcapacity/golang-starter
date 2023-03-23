@@ -1,11 +1,12 @@
 package dataanalyzer_test
 
 import (
+	"testing"
+
 	"github.com/initialcapacity/golang-starter/pkg/dataanalyzer"
 	"github.com/initialcapacity/golang-starter/pkg/databasesupport"
 	"github.com/initialcapacity/golang-starter/pkg/workflowsupport"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestWorkflow(t *testing.T) {

@@ -2,9 +2,10 @@ package websupport
 
 import (
 	"context"
-	"github.com/gorilla/mux"
 	"net"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func Create(addr string, handlers func(x *mux.Router)) *http.Server {

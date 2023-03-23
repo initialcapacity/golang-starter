@@ -3,14 +3,15 @@ package basicwebapp_test
 import (
 	"context"
 	"fmt"
-	"github.com/initialcapacity/golang-starter/pkg/basicwebapp"
-	"github.com/initialcapacity/golang-starter/pkg/testsupport"
-	"github.com/initialcapacity/golang-starter/pkg/websupport"
-	"github.com/stretchr/testify/assert"
 	"io"
 	"net"
 	"net/http"
 	"testing"
+
+	"github.com/initialcapacity/golang-starter/pkg/basicwebapp"
+	"github.com/initialcapacity/golang-starter/pkg/testsupport"
+	"github.com/initialcapacity/golang-starter/pkg/websupport"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestApp(t *testing.T) {

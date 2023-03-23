@@ -2,12 +2,13 @@ package websupport_test
 
 import (
 	"bytes"
-	"github.com/initialcapacity/golang-starter/pkg/websupport"
-	"github.com/initialcapacity/golang-starter/pkg/websupport/test"
-	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/initialcapacity/golang-starter/pkg/websupport"
+	"github.com/initialcapacity/golang-starter/pkg/websupport/test"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestModelAndView(t *testing.T) {

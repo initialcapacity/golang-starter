@@ -3,13 +3,14 @@ package metricssupport_test
 import (
 	"context"
 	"fmt"
+	"io"
+	"net/http"
+	"testing"
+
 	"github.com/gorilla/mux"
 	"github.com/initialcapacity/golang-starter/pkg/metricssupport"
 	"github.com/initialcapacity/golang-starter/pkg/testsupport"
 	"github.com/stretchr/testify/assert"
-	"io"
-	"net/http"
-	"testing"
 )
 
 func TestMetrics(t *testing.T) {

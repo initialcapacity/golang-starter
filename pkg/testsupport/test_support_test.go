@@ -2,11 +2,12 @@ package testsupport_test
 
 import (
 	"context"
+	"testing"
+
 	"github.com/gorilla/mux"
 	"github.com/initialcapacity/golang-starter/pkg/healthsupport"
 	"github.com/initialcapacity/golang-starter/pkg/testsupport"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestHealth(t *testing.T) {

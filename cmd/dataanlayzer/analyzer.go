@@ -1,11 +1,12 @@
 package main
 
 import (
+	"os"
+
 	"github.com/initialcapacity/golang-starter/pkg/dataanalyzer"
 	"github.com/initialcapacity/golang-starter/pkg/databasesupport"
 	"github.com/initialcapacity/golang-starter/pkg/workflowsupport"
 	_ "github.com/lib/pq"
-	"os"
 )
 
 func newDataAnalyzer() workflowsupport.WorkScheduler[dataanalyzer.Task] {

@@ -1,13 +1,14 @@
 package websupport_test
 
 import (
+	"net"
+	"testing"
+
 	"github.com/gorilla/mux"
 	"github.com/initialcapacity/golang-starter/pkg/healthsupport"
 	"github.com/initialcapacity/golang-starter/pkg/testsupport"
 	"github.com/initialcapacity/golang-starter/pkg/websupport"
 	"github.com/stretchr/testify/assert"
-	"net"
-	"testing"
 )
 
 func TestServer(t *testing.T) {

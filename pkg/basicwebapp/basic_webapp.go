@@ -1,12 +1,13 @@
 package basicwebapp
 
 import (
+	"io/fs"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/initialcapacity/golang-starter/pkg/healthsupport"
 	"github.com/initialcapacity/golang-starter/pkg/metricssupport"
 	"github.com/initialcapacity/golang-starter/pkg/websupport"
-	"io/fs"
-	"net/http"
 )
 
 type BasicApp struct {
