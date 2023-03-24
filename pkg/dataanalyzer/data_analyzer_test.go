@@ -10,7 +10,7 @@ import (
 )
 
 func TestWorkflow(t *testing.T) {
-	db, _ := databasesupport.Open("postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable")
+	db, _ := databasesupport.Open("postgres://starter:starter@localhost:5432/starter_development?sslmode=disable")
 	gateway := dataanalyzer.DataGateway{DB: db}
 	worker := dataanalyzer.Worker[dataanalyzer.Task]{Gateway: gateway}
 	finder := dataanalyzer.NewWorkFinder[dataanalyzer.Task](gateway, make(chan bool))

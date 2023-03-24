@@ -1,37 +1,12 @@
 package dataanalyzer
 
 import (
-	"database/sql"
 	"log"
 	"sync/atomic"
 )
 
 type Task struct {
 	Data []byte
-}
-
-type Record struct {
-	data []byte
-}
-
-type DataGateway struct {
-	DB *sql.DB
-}
-
-func (d *DataGateway) Find() []Record {
-	row := d.DB.QueryRow("select 'data' as data")
-	var name string
-	_ = row.Scan(&name)
-	log.Println("Found database records.")
-	return []Record{{[]byte(name)}}
-}
-
-func (d *DataGateway) Save(_ []byte) error {
-	row := d.DB.QueryRow("select 'data' as data")
-	var name string
-	_ = row.Scan(&name)
-	log.Println("Updated database records.")
-	return nil
 }
 
 type Worker[T Task] struct {
@@ -79,10 +54,10 @@ func (a *WorkFinder[T]) Stop() {
 
 func (a *WorkFinder[T]) FindRequested() []Task {
 	dataGateway := a.Gateway.(DataGateway)
-	records := dataGateway.Find()
+	records, _ := dataGateway.Find()
 	s := make([]Task, len(records))
 	for i, r := range records {
-		s[i] = Task{r.data}
+		s[i] = Task{r.Data}
 	}
 	return s
 }

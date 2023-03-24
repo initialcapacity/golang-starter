@@ -41,10 +41,15 @@ docker-compose up
 
 ## Development
 
-Ensure postgres works locally.
+Create a user and database.
 
-```bash
-"postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"
+```sql
+drop database if exists starter_development;
+drop user starter;
+
+create user starter with password 'starter';
+create database starter_development;
+grant all privileges on database starter_development to starter;
 ```
 
 Run the tests.
