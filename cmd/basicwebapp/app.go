@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/initialcapacity/golang-starter/pkg/basicwebapp"
+	"github.com/initialcapacity/golang-starter/internal/basicwebapp"
 	"github.com/initialcapacity/golang-starter/pkg/websupport"
 
 	"log"

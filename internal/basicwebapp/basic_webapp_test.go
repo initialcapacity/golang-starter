@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/initialcapacity/golang-starter/pkg/basicwebapp"
+	"github.com/initialcapacity/golang-starter/internal/basicwebapp"
 	"github.com/initialcapacity/golang-starter/pkg/testsupport"
 	"github.com/initialcapacity/golang-starter/pkg/websupport"
 	"github.com/stretchr/testify/assert"

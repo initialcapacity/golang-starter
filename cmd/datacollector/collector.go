@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/initialcapacity/golang-starter/pkg/datacollector"
+	"github.com/initialcapacity/golang-starter/internal/datacollector"
 	"github.com/initialcapacity/golang-starter/pkg/workflowsupport"
 )
 
