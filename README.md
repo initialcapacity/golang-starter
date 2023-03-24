@@ -27,19 +27,7 @@ Install the following prerequisites.
 * [Docker Desktop](https://www.docker.com/products/docker-desktop)
 * [Postgresql](https://www.postgresql.org/)
 
-Build with Pack.
-
-```bash
-pack build golang-starter --builder heroku/buildpacks:20
-```
-
-Run with docker compose.
-
-```bash
-docker-compose up
-````
-
-## Development
+## For local development
 
 Create a user and database.
 
@@ -57,5 +45,32 @@ Run the tests.
 ```bash
 go clean -testcache && go test ./.../
 ```
+
+Run the apps locally.
+
+```bash
+go run cmd/basicwebapp/app.go
+```
+
+Build and run the apps locally.
+
+```bash
+go install cmd/basicwebapp/app.go
+~/go/bin/app
+```
+
+## For deployment
+
+Build with Pack.
+
+```bash
+pack build golang-starter --builder heroku/buildpacks:20
+```
+
+Run with docker compose.
+
+```bash
+docker-compose up
+````
 
 That's a wrap for now.
