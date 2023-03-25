@@ -1,4 +1,4 @@
-name: build
+name: test
 on: push
 jobs:
   test:
@@ -25,6 +25,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
+      - name: create
+        run: |
+          psql -v on_error_stop=1 --host localhost --username postgresql < databases/create_databases.sql
+        env:
+          PGPASSWORD: postgresql
       - name: test
         run: |
           go test -coverprofile coverage.out  ./.../
