@@ -7,8 +7,8 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: starter
+          POSTGRES_PASSWORD: starter
           POSTGRES_DB: starter_test
         options: >-
           --health-cmd pg_isready
