@@ -9,7 +9,7 @@ import (
 )
 
 func TestDataGateway_Find(t *testing.T) {
-	db, _ := databasesupport.Open("postgres://starter:starter@localhost:5432/starter_development?sslmode=disable")
+	db, _ := databasesupport.Open("postgres://starter:starter@localhost:5432/starter_test?sslmode=disable")
 	gateway := dataanalyzer.DataGateway{DB: db}
 
 	find, err := gateway.Find()

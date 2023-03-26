@@ -31,19 +31,14 @@ Install the following prerequisites.
 
 Create a user and database.
 
-```sql
-drop database if exists starter_development;
-drop user starter;
-
-create user starter with password 'starter';
-create database starter_development;
-grant all privileges on database starter_development to starter;
+```bash
+psql postgres < databases/create_databases.sql
 ```
 
 Run the tests.
 
 ```bash
-go clean -testcache && go test ./.../
+go clean -testcache && go test ./...
 ```
 
 Run the apps locally.
