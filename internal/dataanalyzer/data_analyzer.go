@@ -9,26 +9,26 @@ type Task struct {
 	Data []byte
 }
 
-type Worker[T Task] struct {
-	Gateway interface{}
+type Worker struct {
+	Gateway DataGateway
 }
 
-func (a *Worker[T]) Run(w Task) error {
-	dataGateway := a.Gateway.(DataGateway)
+func (a *Worker) Run(w Task) error {
+	dataGateway := a.Gateway
 	return dataGateway.Save(w.Data)
 }
 
-func NewWorkFinder[T Task](gateway DataGateway, c chan bool) WorkFinder[T] {
-	return WorkFinder[T]{Gateway: gateway, Results: c}
+func NewWorkFinder(gateway DataGateway, c chan bool) WorkFinder {
+	return WorkFinder{Gateway: gateway, Results: c}
 }
 
-type WorkFinder[T Task] struct {
-	Gateway interface{}
+type WorkFinder struct {
+	Gateway DataGateway
 	Results chan bool
 	Panics  uint64
 }
 
-func (a *WorkFinder[T]) MarkErroneous(task T) {
+func (a *WorkFinder) MarkErroneous(task Task) {
 	defer func() {
 		if err := recover(); err != nil {
 			atomic.AddUint64(&a.Panics, 1)
@@ -38,7 +38,7 @@ func (a *WorkFinder[T]) MarkErroneous(task T) {
 	a.Results <- false
 }
 
-func (a *WorkFinder[T]) MarkCompleted(task T) {
+func (a *WorkFinder) MarkCompleted(task Task) {
 	defer func() {
 		if err := recover(); err != nil {
 			atomic.AddUint64(&a.Panics, 1)
@@ -48,12 +48,12 @@ func (a *WorkFinder[T]) MarkCompleted(task T) {
 	a.Results <- true
 }
 
-func (a *WorkFinder[T]) Stop() {
+func (a *WorkFinder) Stop() {
 	close(a.Results)
 }
 
-func (a *WorkFinder[T]) FindRequested() []Task {
-	dataGateway := a.Gateway.(DataGateway)
+func (a *WorkFinder) FindRequested() []Task {
+	dataGateway := a.Gateway
 	records, _ := dataGateway.Find()
 	s := make([]Task, len(records))
 	for i, r := range records {
