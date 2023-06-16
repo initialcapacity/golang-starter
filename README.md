@@ -1,6 +1,6 @@
 # Golang starter
 
-[![Build results](https://github.com/initialcapacity/golang-starter/workflows/build/badge.svg)](https://github.com/initialcapacity/golang-starter/actions)
+[![Build results](https://github.com/initialcapacity/golang-starter/workflows/test/badge.svg)](https://github.com/initialcapacity/golang-starter/actions)
 [![codecov](https://codecov.io/gh/initialcapacity/golang-starter/branch/main/graph/badge.svg)](https://codecov.io/gh/initialcapacity/golang-starter)
 
 An [application continuum](https://www.appcontinuum.io/) style example using Golang
