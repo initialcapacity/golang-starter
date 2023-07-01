@@ -37,7 +37,7 @@ jobs:
       - name: testDb
         run: |
           psql --host localhost --username postgresql < databases/create_databases.sql
-          go run cmd/databasemigration/database_migration.go -test
+          go run cmd/databasemigrations/database_migrations.go -test
         env:
           PGPASSWORD: postgresql
       - name: test
