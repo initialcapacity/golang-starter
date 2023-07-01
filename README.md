@@ -16,7 +16,7 @@ The example showcases on the below technologies -
 * Web Framework [Gorilla/mux](https://github.com/gorilla/mux)
 * Build tool [Golang](https://go.dev/)
 * Testing tools [Testify](https://github.com/stretchr/testify)
-* Production [FreshCloud](https://www.freshcloud.com/) on Google's Cloud Platform
+* Production Google's Cloud Platform
 
 ## Getting Started
 

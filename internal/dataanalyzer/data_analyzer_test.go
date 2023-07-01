@@ -2,6 +2,7 @@ package dataanalyzer_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/initialcapacity/golang-starter/internal/dataanalyzer"
 	"github.com/initialcapacity/golang-starter/pkg/databasesupport"
@@ -13,36 +14,19 @@ func TestWorkflow(t *testing.T) {
 	db, _ := databasesupport.Open("postgres://starter:starter@localhost:5432/starter_test?sslmode=disable")
 	gateway := dataanalyzer.DataGateway{DB: db}
 	worker := dataanalyzer.Worker{Gateway: gateway}
-	finder := dataanalyzer.NewWorkFinder(gateway, make(chan bool))
+	finder := dataanalyzer.NewWorkFinder(gateway)
 	list := []workflowsupport.Worker[dataanalyzer.Task]{&worker}
-	scheduler := workflowsupport.NewScheduler[dataanalyzer.Task](&finder, list, 100)
+	scheduler := workflowsupport.NewScheduler[dataanalyzer.Task](&finder, list, 10)
 	scheduler.Start()
-	assert.True(t, <-finder.Results)
+	for finder.Results.Load() <= 2 {
+		time.Sleep(time.Duration(10) * time.Millisecond)
+	}
+	assert.True(t, finder.Results.Load() > 2)
+	scheduler.Stop()
 }
 
 func TestWorkflow_Stop(t *testing.T) {
 	gateway := dataanalyzer.DataGateway{}
-	finder := dataanalyzer.NewWorkFinder(gateway, make(chan bool))
+	finder := dataanalyzer.NewWorkFinder(gateway)
 	finder.Stop()
-}
-
-func TestWorker_PanicOnCompleted(t *testing.T) {
-	withClosedChannel(func(finder dataanalyzer.WorkFinder) {
-		finder.MarkCompleted(dataanalyzer.Task{})
-		assert.Equal(t, uint64(1), finder.Panics)
-	})
-}
-
-func TestWorker_PanicOnErroneous(t *testing.T) {
-	withClosedChannel(func(finder dataanalyzer.WorkFinder) {
-		finder.MarkErroneous(dataanalyzer.Task{})
-		assert.Equal(t, uint64(1), finder.Panics)
-	})
-}
-
-func withClosedChannel(f func(finder dataanalyzer.WorkFinder)) {
-	results := make(chan bool)
-	finder := dataanalyzer.WorkFinder{Results: results}
-	close(results)
-	f(finder)
 }

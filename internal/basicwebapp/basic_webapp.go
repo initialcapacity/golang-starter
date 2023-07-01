@@ -30,6 +30,6 @@ func (a BasicApp) LoadHandlers() func(x *mux.Router) {
 	}
 }
 
-func (a *BasicApp) dashboard(writer http.ResponseWriter, req *http.Request) {
+func (a BasicApp) dashboard(writer http.ResponseWriter, req *http.Request) {
 	_ = websupport.ModelAndView(writer, &Resources, "index", websupport.Model{Map: map[string]any{}})
 }

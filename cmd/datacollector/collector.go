@@ -1,14 +1,25 @@
 package main
 
 import (
+	"os"
+	"sync/atomic"
+
 	"github.com/initialcapacity/golang-starter/internal/datacollector"
+	"github.com/initialcapacity/golang-starter/pkg/databasesupport"
 	"github.com/initialcapacity/golang-starter/pkg/workflowsupport"
+	_ "github.com/lib/pq"
 )
 
 func newDataCollector() workflowsupport.WorkScheduler[datacollector.Task] {
-	gateway := datacollector.DataGateway{Urls: []string{"https://feed.infoq.com/"}}
-	worker := datacollector.Worker[datacollector.Task]{}
-	finder := datacollector.WorkFinder[datacollector.Task]{Gateway: gateway, Results: make(chan bool)}
+	url := os.Getenv("POSTGRESQL_URL")
+	if url == "" {
+		panic("oops, unable to find postgres url.")
+	}
+	db, _ := databasesupport.Open(url)
+	gateway := datacollector.DataGateway{DB: db}
+
+	worker := datacollector.Worker{Gateway: gateway}
+	finder := datacollector.WorkFinder{Gateway: gateway, Results: atomic.Int64{}}
 	list := []workflowsupport.Worker[datacollector.Task]{&worker}
 	scheduler := workflowsupport.NewScheduler[datacollector.Task](&finder, list, 12_000)
 	return scheduler

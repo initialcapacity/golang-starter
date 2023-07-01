@@ -2,55 +2,31 @@ package datacollector_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/initialcapacity/golang-starter/internal/datacollector"
+	"github.com/initialcapacity/golang-starter/pkg/databasesupport"
 	"github.com/initialcapacity/golang-starter/pkg/workflowsupport"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestWorkflow(t *testing.T) {
-	withOpenChannel("https://feed.infoq.com/", func(finder datacollector.WorkFinder[datacollector.Task]) {
-		assert.True(t, <-finder.Results)
-	})
-}
-
-func TestWorkflow_Fails(t *testing.T) {
-	withOpenChannel("https://feed.infoq./", func(finder datacollector.WorkFinder[datacollector.Task]) {
-		assert.False(t, <-finder.Results)
-	})
-}
-
-func TestWorker_PanicOnCompleted(t *testing.T) {
-	withClosedChannel(func(finder datacollector.WorkFinder[datacollector.Task]) {
-		finder.MarkCompleted(datacollector.Task{})
-		assert.Equal(t, uint64(1), finder.Panics)
-	})
-}
-
-func TestWorker_PanicOnErroneous(t *testing.T) {
-	withClosedChannel(func(finder datacollector.WorkFinder[datacollector.Task]) {
-		finder.MarkErroneous(datacollector.Task{})
-		assert.Equal(t, uint64(1), finder.Panics)
-	})
+	db, _ := databasesupport.Open("postgres://starter:starter@localhost:5432/starter_test?sslmode=disable")
+	gateway := datacollector.DataGateway{DB: db}
+	worker := datacollector.Worker{Gateway: gateway}
+	finder := datacollector.NewWorkFinder(gateway)
+	list := []workflowsupport.Worker[datacollector.Task]{&worker}
+	scheduler := workflowsupport.NewScheduler[datacollector.Task](&finder, list, 10)
+	scheduler.Start()
+	for finder.Results.Load() <= 2 {
+		time.Sleep(time.Duration(10) * time.Millisecond)
+	}
+	assert.True(t, finder.Results.Load() > 2)
+	scheduler.Stop()
 }
 
 func TestWorkflow_Stop(t *testing.T) {
-	finder := datacollector.NewWorkFinder(datacollector.DataGateway{Urls: []string{"https://feed.infoq.com/"}}, make(chan bool))
+	gateway := datacollector.DataGateway{}
+	finder := datacollector.NewWorkFinder(gateway)
 	finder.Stop()
-}
-
-func withOpenChannel[T datacollector.Task](url string, f func(finder datacollector.WorkFinder[datacollector.Task])) {
-	var worker datacollector.Worker[datacollector.Task]
-	finder := datacollector.NewWorkFinder[datacollector.Task](datacollector.DataGateway{Urls: []string{url}}, make(chan bool))
-	list := []workflowsupport.Worker[datacollector.Task]{&worker}
-	scheduler := workflowsupport.NewScheduler[datacollector.Task](&finder, list, 100)
-	scheduler.Start()
-	f(finder)
-}
-
-func withClosedChannel[T datacollector.Task](f func(finder datacollector.WorkFinder[datacollector.Task])) {
-	results := make(chan bool)
-	finder := datacollector.WorkFinder[datacollector.Task]{Results: results}
-	close(results)
-	f(finder)
 }

@@ -12,13 +12,17 @@ services:
     container_name: golang-analyzer
     command: dataanlayzer
     environment:
-      POSTGRESQL_URL: postgres://postgres:postgres@postgresql:5432/postgres?sslmode=disable
+      POSTGRESQL_URL: postgres://starter:starter@postgresql:5432/starter_test?sslmode=disable
     depends_on:
       - postgresql
   data-collector:
     image: golang-starter
     container_name: golang-collector
     command: datacollector
+    environment:
+      POSTGRESQL_URL: postgres://starter:starter@postgresql:5432/starter_test?sslmode=disable
+    depends_on:
+      - postgresql
   postgresql:
     image: postgres
     container_name: golang-postgresql

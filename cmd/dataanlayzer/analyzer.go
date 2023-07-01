@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"sync/atomic"
 
 	"github.com/initialcapacity/golang-starter/internal/dataanalyzer"
 	"github.com/initialcapacity/golang-starter/pkg/databasesupport"
@@ -18,7 +19,7 @@ func newDataAnalyzer() workflowsupport.WorkScheduler[dataanalyzer.Task] {
 	gateway := dataanalyzer.DataGateway{DB: db}
 
 	worker := dataanalyzer.Worker{Gateway: gateway}
-	finder := dataanalyzer.WorkFinder{Gateway: gateway, Results: make(chan bool)}
+	finder := dataanalyzer.WorkFinder{Gateway: gateway, Results: atomic.Int64{}}
 	list := []workflowsupport.Worker[dataanalyzer.Task]{&worker}
 	scheduler := workflowsupport.NewScheduler[dataanalyzer.Task](&finder, list, 12_000)
 	return scheduler

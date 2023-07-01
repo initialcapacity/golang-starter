@@ -7,9 +7,8 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: starter
-          POSTGRES_PASSWORD: starter
-          POSTGRES_DB: starter_test
+          POSTGRES_USER: postgresql
+          POSTGRES_PASSWORD: postgresql
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -17,11 +16,30 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: '^1.20'
+          go-version: '^1.21'
+      - name: clients
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client redis-tools
+      - name: testDb
+        run: |
+          psql --host localhost --username postgresql < databases/create_databases.sql
+          go run cmd/databasemigration/database_migration.go -test
+        env:
+          PGPASSWORD: postgresql
       - name: test
         run: |
           go test -coverprofile coverage.out  ./.../
