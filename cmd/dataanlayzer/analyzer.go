@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"sync/atomic"
 
@@ -26,6 +27,7 @@ func newDataAnalyzer() workflowsupport.WorkScheduler[dataanalyzer.Task] {
 }
 
 func main() {
+	log.Println("Starting the data analyzer.")
 	scheduler := newDataAnalyzer()
 	scheduler.Start()
 	select {}

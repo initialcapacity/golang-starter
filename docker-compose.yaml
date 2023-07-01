@@ -1,34 +1,50 @@
 services:
+  postgresql:
+    image: postgres:14.5
+    container_name: golang-postgresql
+    restart: always
+    environment:
+      POSTGRES_USER: postgresql
+      POSTGRES_PASSWORD: postgresql
+    volumes:
+      - ".postgres:/var/lib/postgresql/data"
+      - "./databases/docker/initdb.d:/docker-entrypoint-initdb.d/:ro"
+  migrate:
+    image: migrate/migrate
+    container_name: golang-migrate
+    entrypoint: ""
+    command: "/bin/sh /home/databases/docker/migrate-databases.sh"
+    volumes:
+      - "./databases/starter:/home/databases/starter:ro"
+      - "./databases/docker:/home/databases/docker:ro"
+    depends_on:
+      - postgresql
   basic-server:
     image: golang-starter
-    container_name: golang-server
+    container_name: golang-webapp
     ports:
-      - "8888:8888"
+      - "8989:8989"
     command: basicwebapp
+    entrypoint: basicwebapp
     environment:
-      PORT: 8888
+      PORT: 8989
   data-analyzer:
     image: golang-starter
     container_name: golang-analyzer
     command: dataanlayzer
+    entrypoint: dataanlayzer
     environment:
-      POSTGRESQL_URL: postgres://starter:starter@postgresql:5432/starter_test?sslmode=disable
+      POSTGRESQL_URL: postgres://starter:starter@postgresql:5432/starter_development?sslmode=disable
+      PORT: 8988
     depends_on:
       - postgresql
   data-collector:
     image: golang-starter
     container_name: golang-collector
     command: datacollector
+    entrypoint: datacollector
     environment:
-      POSTGRESQL_URL: postgres://starter:starter@postgresql:5432/starter_test?sslmode=disable
+      POSTGRESQL_URL: postgres://starter:starter@postgresql:5432/starter_development?sslmode=disable
+      PORT: 8987
     depends_on:
       - postgresql
-  postgresql:
-    image: postgres
-    container_name: golang-postgresql
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - ".postgres:/var/lib/postgresql/data"

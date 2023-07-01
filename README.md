@@ -54,12 +54,19 @@ go install cmd/basicwebapp/app.go
 ~/go/bin/app
 ```
 
-## For deployment
+## For docker
 
 Build with Pack.
 
 ```bash
-pack build golang-starter --builder heroku/buildpacks:20
+pack build golang-starter --builder paketobuildpacks/builder:tiny
+```
+
+Modify you local database file permissions.
+
+```bash
+chmod 775 ./databases/docker/initdb.d/create-databases.sh
+chmod 775 ./databases/docker/migrate-databases.sh
 ```
 
 Run with docker compose.

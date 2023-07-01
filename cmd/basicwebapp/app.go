@@ -27,5 +27,6 @@ func newApp(addr string) (*http.Server, net.Listener) {
 }
 
 func main() {
+	log.Println("Starting the webapp.")
 	websupport.Start(newApp("0.0.0.0:8888"))
 }

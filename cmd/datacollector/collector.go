@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"sync/atomic"
 
@@ -26,6 +27,7 @@ func newDataCollector() workflowsupport.WorkScheduler[datacollector.Task] {
 }
 
 func main() {
+	log.Println("Starting the data collector.")
 	scheduler := newDataCollector()
 	scheduler.Start()
 	select {}
